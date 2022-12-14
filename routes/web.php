@@ -11,6 +11,9 @@
 |
 */
 
+use App\HelpersBot\Telegram;
+
 Route::get('/', function () {
-    return view('welcome');
+    $TG= new Telegram();
+    $TG->sendMessage(909458069, 'aaaaaa');
 });

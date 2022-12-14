@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\HelpersBot\Telegram;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -11,6 +12,7 @@ class Handler extends ExceptionHandler
      * A list of the exception types that are not reported.
      *
      * @var array
+     *
      */
     protected $dontReport = [
         //
@@ -32,9 +34,21 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return void
      */
-    public function report(Exception $exception)
+    protected $telegram;
+
+    public function __construct(Container $container, Telegram $telegram)
     {
-        parent::report($exception);
+        parent::__construct($container);
+        $this->telegram = $telegram;
+    }
+    public function report(Throwable $e)
+    {
+        $data = [
+            'description' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ];
+        /////$this->telegram->sendMessage(env('REPORT_TELEGRAM_ID'), (string)view('report', $data));
     }
 
     /**
